@@ -1,0 +1,14 @@
+Package: gbifmt
+Type: Package
+Title: Creates machine tags for GBIF datasets
+Version: 0.1.0
+Author: Authors@R: c(person("John","Waller", role = c("aut", "cre"), email = "jwaller@gbif.org", comment = c(ORCID ="0000-0002-7302-5976")))
+Description: Creates machine tags for GBIF datasets
+License: License: MIT + file LICENSE
+Encoding: UTF-8
+Imports:
+    httr2,
+    dplyr,
+    purrr
+LazyData: true
+RoxygenNote: 7.2.3
