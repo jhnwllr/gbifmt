@@ -4,17 +4,17 @@
 \alias{delete_mt}
 \title{Delete a machine tag}
 \usage{
-delete_mt(datasetkey, key, api = "gbif")
+delete_mt(uuid, key, type = "dataset", api = "gbif")
 }
 \arguments{
-\item{datasetkey}{uuid}
-
-\item{key}{key of machine tag}
+\item{key}{"dataset", "organization", "installation"}
 
 \item{api}{gbif or uat}
+
+\item{datasetkey}{uuid}
 }
 \value{
-a message
+Status message
 }
 \description{
 Delete a machine tag

@@ -5,22 +5,25 @@
 \title{create a machine tag}
 \usage{
 create_mt(
-  datasetkey,
+  uuid,
   namespace,
   name,
   value,
+  type = "dataset",
   embedValueList = FALSE,
   api = "gbif"
 )
 }
 \arguments{
-\item{datasetkey}{uuid}
+\item{uuid}{uuid}
 
 \item{namespace}{the name of the machinetag in general}
 
 \item{name}{the name of the machineTag often similar to namespace}
 
 \item{value}{the value of the machine tag}
+
+\item{type}{"dataset", "organization", "installation"}
 
 \item{embedValueList}{use this to embed json into a string}
 
@@ -35,7 +38,7 @@ create a machine tag
 \examples{
 \dontrun{
 create_mt(
-datasetkey="38b4c89f-584c-41bb-bd8f-cd1def33e92f",
+uuid="38b4c89f-584c-41bb-bd8f-cd1def33e92f",
 namespace="testMachineTag.jwaller.gbif.org",
 name="testMachineTag",
 value=1,

@@ -8,7 +8,9 @@ get_mt(
   machineTagNamespace = NULL,
   machineTagValue = NULL,
   machineTagName = NULL,
-  api = "gbif"
+  limit = 500,
+  api = "gbif",
+  type = "dataset"
 )
 }
 \arguments{
@@ -19,9 +21,11 @@ get_mt(
 \item{machineTagName}{name}
 
 \item{api}{gbif or uat}
+
+\item{type}{"organization", "dataset", "installation"}
 }
 \value{
-a message
+`tibble` of machine tag data.
 }
 \description{
 Get a machine tag

@@ -4,6 +4,7 @@
 #' @param machineTagValue value
 #' @param machineTagName name
 #' @param api gbif or uat
+#' @param type "organization", "dataset", "installation"
 #'
 #' @return
 #' `tibble` of machine tag data. 
@@ -19,14 +20,17 @@
 get_mt <- function(machineTagNamespace=NULL,
                    machineTagValue=NULL,
                    machineTagName=NULL,
-                   api="gbif") {
-
-  if(api == "uat") base <- "http://api.gbif-uat.org/v1/dataset/"
-  if(api == "gbif") base <- "http://api.gbif.org/v1/dataset/"
+                   limit=500,
+                   api="gbif",
+                   type="dataset") {
+  
+    if(api == "uat") base <- paste0("http://api.gbif-uat.org/v1/",type,"/")
+    if(api == "gbif") base <- paste0("http://api.gbif.org/v1/",type,"/")
 
   query <- list(machineTagNamespace=machineTagNamespace,
                 machineTagValue=machineTagValue,
-                machineTagName=machineTagName) %>%
+                machineTagName=machineTagName,
+                limit=limit) %>%
            purrr::compact()
 
   url <- base
@@ -38,35 +42,35 @@ get_mt <- function(machineTagNamespace=NULL,
   purrr::pluck("results")
 
   # Start processing maching tags
-  datasetkey = L %>%
-    map_chr(~ .x$key)
+  uuid = L %>%
+    purrr::map_chr(~ .x$key)
 
   machineTags <- L %>%
-    map(~ .x$machineTags)
+    purrr::map(~ .x$machineTags)
 
   # get nested data
   key <- machineTags %>%
-    map(~ .x %>% map(~ .x$key))
+    purrr::map(~ .x %>% purrr::map(~ .x$key))
 
   namespace_source <- machineTags %>%
-    map(~ .x %>% map(~ .x$namespace))
+    purrr::map(~ .x %>% purrr::map(~ .x$namespace))
 
   value <- machineTags %>%
-    map(~ .x %>% map(~ .x$value))
+    purrr::map(~ .x %>% purrr::map(~ .x$value))
 
   name <- machineTags %>%
-    map(~ .x %>% map(~ .x$name))
+    purrr::map(~ .x %>% purrr::map(~ .x$name))
 
   createdBy <- machineTags %>%
-    map(~ .x %>% map(~ .x$createdBy))
+    purrr::map(~ .x %>% purrr::map(~ .x$createdBy))
 
   created <- machineTags %>%
-    map(~ .x %>% map(~ .x$created))
+    purrr::map(~ .x %>% purrr::map(~ .x$created))
 
   # put list columns into a tibble
-  tibble(datasetkey,key,namespace = namespace_source,name,value,createdBy,created) %>%
+  tibble::tibble(uuid,key,namespace = namespace_source,name,value,createdBy,created) %>%
     tidyr::unnest(cols = c(key,namespace,name,value,createdBy,created)) %>% # unnest data twice
     tidyr::unnest(cols = c(key,namespace,name,value,createdBy,created)) %>%
-    filter(namespace == !!machineTagNamespace) # get only the machineTag namespace you are intersted in
+    dplyr::filter(namespace == !!machineTagNamespace) # get only the machineTag namespace you are intersted in
 
 }
